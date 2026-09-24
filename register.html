@@ -46,10 +46,63 @@
     </div>
 
     <script>
-        document.getElementById('registerForm').addEventListener('submit', function(e) {
+        document.getElementById('registerForm').addEventListener('submit', async function(e) {
             e.preventDefault();
-            // Basic mock registration - redirect to dashboard
-            window.location.href = 'dashboard.html';
+            const email = e.target.elements[1].value;
+            const password = e.target.elements[2].value;
+            const btn = e.target.querySelector('button');
+            btn.textContent = 'جاري الإنشاء...';
+            btn.disabled = true;
+
+            try {
+                const res = await fetch('http://127.0.0.1:8000/api/auth/register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                });
+                
+                const data = await res.json();
+                
+                if (res.ok) {
+                    // Also login directly to get token
+                    const formData = new URLSearchParams();
+                    formData.append('username', email);
+                    formData.append('password', password);
+                    const loginRes = await fetch('http://127.0.0.1:8000/api/auth/login', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                        body: formData
+                    });
+                    if (loginRes.ok) {
+                        const loginData = await loginRes.json();
+                        localStorage.setItem('whatsauto_token', loginData.access_token);
+                        
+                        // Set the company name initially
+                        const companyName = e.target.elements[0].value;
+                        await fetch('http://127.0.0.1:8000/api/settings/bot', {
+                            method: 'PUT',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'Authorization': `Bearer ${loginData.access_token}`
+                            },
+                            body: JSON.stringify({
+                                company_name: companyName,
+                                system_prompt: "أنت مساعد ذكي للمبيعات وخدمة العملاء.",
+                                tone: "professional",
+                                is_active: true
+                            })
+                        });
+                        window.location.href = 'dashboard.html';
+                    }
+                } else {
+                    alert(data.detail || 'فشل التسجيل. البريد مستخدم مسبقاً؟');
+                }
+            } catch (err) {
+                alert('خطأ في الاتصال بالخادم.');
+            } finally {
+                btn.textContent = 'إنشاء الحساب';
+                btn.disabled = false;
+            }
         });
     </script>
 </body>

@@ -115,20 +115,74 @@
     </main>
 
     <script>
-        const botToggle = document.getElementById('botToggle');
-        const botStatusText = document.getElementById('botStatusText');
-        const toggleLabel = document.querySelector('.toggle-label');
-
-        botToggle.addEventListener('change', function() {
-            if (this.checked) {
-                botStatusText.textContent = 'البوت يعمل بانتظام';
-                botStatusText.className = 'font-bold text-green-700';
-                toggleLabel.style.backgroundColor = '#22c55e'; // green-500
-            } else {
-                botStatusText.textContent = 'البوت متوقف';
-                botStatusText.className = 'font-bold text-slate-500';
-                toggleLabel.style.backgroundColor = '#cbd5e1'; // slate-300
+        document.addEventListener('DOMContentLoaded', async () => {
+            const token = localStorage.getItem('whatsauto_token');
+            if (!token) {
+                window.location.href = 'login.html';
+                return;
             }
+
+            // Logout
+            document.querySelectorAll('a[href="login.html"]').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    localStorage.removeItem('whatsauto_token');
+                });
+            });
+
+            const botToggle = document.getElementById('botToggle');
+            const botStatusText = document.getElementById('botStatusText');
+            const toggleLabel = document.querySelector('.toggle-label');
+            let botSettings = null;
+
+            function updateUI(isActive) {
+                if (isActive) {
+                    botStatusText.textContent = 'البوت يعمل بانتظام';
+                    botStatusText.className = 'font-bold text-green-700';
+                    toggleLabel.style.backgroundColor = '#22c55e'; // green-500
+                    botToggle.checked = true;
+                } else {
+                    botStatusText.textContent = 'البوت متوقف';
+                    botStatusText.className = 'font-bold text-slate-500';
+                    toggleLabel.style.backgroundColor = '#cbd5e1'; // slate-300
+                    botToggle.checked = false;
+                }
+            }
+
+            // Fetch current settings to get is_active
+            try {
+                const res = await fetch('http://127.0.0.1:8000/api/settings/bot', {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                if (res.ok) {
+                    botSettings = await res.json();
+                    updateUI(botSettings.is_active);
+                } else if (res.status === 401) {
+                    window.location.href = 'login.html';
+                }
+            } catch (e) {
+                console.error('Error fetching settings:', e);
+            }
+
+            botToggle.addEventListener('change', async function() {
+                const isActive = this.checked;
+                updateUI(isActive);
+                
+                if (botSettings) {
+                    botSettings.is_active = isActive;
+                    try {
+                        await fetch('http://127.0.0.1:8000/api/settings/bot', {
+                            method: 'PUT',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'Authorization': `Bearer ${token}`
+                            },
+                            body: JSON.stringify(botSettings)
+                        });
+                    } catch (e) {
+                        console.error('Failed to update status', e);
+                    }
+                }
+            });
         });
     </script>
 </body>

@@ -54,8 +54,8 @@
                 </div>
                 
                 <div class="bg-slate-50 p-4 rounded-xl border border-slate-100 flex items-center justify-between">
-                    <span class="font-bold text-slate-500">غير متصل</span>
-                    <button class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-6 rounded-lg transition shadow-sm text-sm">ربط الحساب</button>
+                    <span id="wa_status" class="font-bold text-slate-500">غير متصل</span>
+                    <button id="wa_btn" class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-6 rounded-lg transition shadow-sm text-sm">ربط الحساب</button>
                 </div>
             </div>
 
@@ -72,12 +72,94 @@
                 </div>
                 
                 <div class="bg-slate-50 p-4 rounded-xl border border-slate-100 flex items-center justify-between">
-                    <span class="font-bold text-slate-500">غير متصل</span>
-                    <button class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-lg transition shadow-sm text-sm">ربط الصفحة</button>
+                    <span id="fb_status" class="font-bold text-slate-500">غير متصل</span>
+                    <button id="fb_btn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-lg transition shadow-sm text-sm">ربط الصفحة</button>
                 </div>
             </div>
 
         </div>
     </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            const token = localStorage.getItem('whatsauto_token');
+            if (!token) {
+                window.location.href = 'login.html';
+                return;
+            }
+
+            // Logout
+            document.querySelectorAll('a[href="login.html"]').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    localStorage.removeItem('whatsauto_token');
+                });
+            });
+
+            // Elements
+            const waStatus = document.getElementById('wa_status');
+            const waBtn = document.getElementById('wa_btn');
+            const fbStatus = document.getElementById('fb_status');
+            const fbBtn = document.getElementById('fb_btn');
+
+            async function loadChannels() {
+                try {
+                    const res = await fetch('http://127.0.0.1:8000/api/channels/', {
+                        headers: { 'Authorization': `Bearer ${token}` }
+                    });
+                    if (res.ok) {
+                        const channels = await res.json();
+                        channels.forEach(ch => {
+                            if (ch.platform === 'whatsapp' && ch.is_active) {
+                                waStatus.textContent = 'متصل';
+                                waStatus.className = 'font-bold text-green-600';
+                                waBtn.textContent = 'تعديل الربط';
+                                waBtn.className = 'bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold py-2 px-6 rounded-lg transition shadow-sm text-sm';
+                            }
+                            if (ch.platform === 'facebook' && ch.is_active) {
+                                fbStatus.textContent = 'متصل';
+                                fbStatus.className = 'font-bold text-blue-600';
+                                fbBtn.textContent = 'تعديل الربط';
+                                fbBtn.className = 'bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold py-2 px-6 rounded-lg transition shadow-sm text-sm';
+                            }
+                        });
+                    } else if (res.status === 401) {
+                        window.location.href = 'login.html';
+                    }
+                } catch (e) {
+                    console.error('Error fetching channels', e);
+                }
+            }
+
+            async function connectChannel(platform) {
+                const channelId = prompt(`أدخل معرف ${platform === 'whatsapp' ? 'الواتساب (رقم الهاتف)' : 'صفحة الفيسبوك'}:`);
+                if (!channelId) return;
+
+                try {
+                    const res = await fetch('http://127.0.0.1:8000/api/channels/', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${token}`
+                        },
+                        body: JSON.stringify({ platform, channel_id: channelId })
+                    });
+
+                    if (res.ok) {
+                        alert('تم ربط الحساب بنجاح!');
+                        loadChannels();
+                    } else {
+                        alert('حدث خطأ أثناء الربط.');
+                    }
+                } catch (e) {
+                    alert('خطأ في الاتصال.');
+                }
+            }
+
+            waBtn.addEventListener('click', () => connectChannel('whatsapp'));
+            fbBtn.addEventListener('click', () => connectChannel('facebook'));
+
+            loadChannels();
+        });
+    </script>
 </body>
 </html>

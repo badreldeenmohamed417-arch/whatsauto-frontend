@@ -43,10 +43,40 @@
     </div>
 
     <script>
-        document.getElementById('loginForm').addEventListener('submit', function(e) {
+        document.getElementById('loginForm').addEventListener('submit', async function(e) {
             e.preventDefault();
-            // Basic mock login - redirect to dashboard
-            window.location.href = 'dashboard.html';
+            const email = e.target.elements[0].value;
+            const password = e.target.elements[1].value;
+            const btn = e.target.querySelector('button');
+            btn.textContent = 'جاري الدخول...';
+            btn.disabled = true;
+
+            try {
+                // FastAPI OAuth2PasswordBearer expects form data: username and password
+                const formData = new URLSearchParams();
+                formData.append('username', email);
+                formData.append('password', password);
+
+                const res = await fetch('http://127.0.0.1:8000/api/auth/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: formData
+                });
+                
+                const data = await res.json();
+                
+                if (res.ok) {
+                    localStorage.setItem('whatsauto_token', data.access_token);
+                    window.location.href = 'dashboard.html';
+                } else {
+                    alert(data.detail || 'فشل تسجيل الدخول. يرجى التحقق من البيانات.');
+                }
+            } catch (err) {
+                alert('خطأ في الاتصال بالخادم.');
+            } finally {
+                btn.textContent = 'دخول';
+                btn.disabled = false;
+            }
         });
     </script>
 </body>

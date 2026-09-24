@@ -1,166 +1,36 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>القنوات - WhatsAuto</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
-    <style>
-        body { font-family: 'Cairo', sans-serif; }
-    </style>
-</head>
-<body class="bg-slate-50 text-slate-900 flex min-h-screen">
-
-    <!-- Sidebar -->
-    <aside class="w-64 bg-white border-l border-slate-200 h-screen p-6 hidden md:flex md:flex-col fixed sticky top-0">
-        <div class="text-2xl font-bold text-blue-600 mb-10"><a href="index.html">WhatsAuto</a></div>
-        <nav class="space-y-2 flex-1">
-            <a href="dashboard.html" class="block px-4 py-2 text-slate-600 hover:bg-slate-50 rounded-lg transition font-medium">الرئيسية</a>
-            <a href="settings.html" class="block px-4 py-2 text-slate-600 hover:bg-slate-50 rounded-lg transition font-medium">الإعدادات</a>
-            <a href="channels.html" class="block px-4 py-2 bg-blue-50 text-blue-600 rounded-lg font-bold transition">القنوات (WhatsApp & FB)</a>
-        </nav>
-        <div class="mt-auto">
-            <a href="login.html" class="block px-4 py-2 text-red-500 hover:bg-red-50 rounded-lg transition font-medium text-center">تسجيل الخروج</a>
-        </div>
-    </aside>
-
-    <!-- Main Content -->
-    <main class="flex-1 p-6 md:p-10 w-full overflow-y-auto">
-        
-        <!-- Mobile Header -->
-        <header class="flex md:hidden justify-between items-center mb-8 border-b pb-4">
-            <div class="text-xl font-bold text-blue-600">WhatsAuto</div>
-            <a href="login.html" class="text-red-500 font-medium text-sm">تسجيل الخروج</a>
-        </header>
-
-        <header class="mb-10 hidden md:block">
-            <h1 class="text-3xl font-bold text-slate-800">إدارة القنوات</h1>
-            <p class="text-slate-500 mt-2">قم بربط قنواتك الخاصة ليتمكن البوت من الرد على عملائك تلقائياً.</p>
-        </header>
-
-        <div class="grid md:grid-cols-2 gap-6">
-            
-            <!-- WhatsApp Card -->
-            <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm hover:shadow transition flex flex-col justify-between">
-                <div>
-                    <div class="flex items-center gap-3 mb-4">
-                        <div class="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center text-green-600">
-                            <svg class="w-7 h-7" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.015c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>
-                        </div>
-                        <h2 class="text-xl font-bold text-slate-800">واتساب للأعمال</h2>
-                    </div>
-                    <p class="text-slate-600 mb-6 text-sm">استقبل رسائل العملاء عبر واتساب ودع البوت يرد عليهم تلقائياً.</p>
-                </div>
-                
-                <div class="bg-slate-50 p-4 rounded-xl border border-slate-100 flex items-center justify-between">
-                    <span id="wa_status" class="font-bold text-slate-500">غير متصل</span>
-                    <button id="wa_btn" class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-6 rounded-lg transition shadow-sm text-sm">ربط الحساب</button>
-                </div>
-            </div>
-
-            <!-- Facebook Card -->
-            <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm hover:shadow transition flex flex-col justify-between">
-                <div>
-                    <div class="flex items-center gap-3 mb-4">
-                        <div class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center text-blue-600">
-                            <svg class="w-7 h-7" fill="currentColor" viewBox="0 0 24 24"><path d="M12.001 2C6.478 2 2 6.136 2 11.238c0 2.923 1.492 5.518 3.82 7.234v3.528l3.49-1.921c.854.237 1.755.359 2.69.359 5.524 0 10.002-4.136 10.002-9.238C22.003 6.136 17.525 2 12.001 2zm1.096 12.441l-2.793-2.984-5.466 2.984 6.012-6.388 2.87 2.984 5.387-2.984-6.01 6.388z"/></svg>
-                        </div>
-                        <h2 class="text-xl font-bold text-slate-800">فيسبوك ماسنجر وتعليقات</h2>
-                    </div>
-                    <p class="text-slate-600 mb-6 text-sm">الرد التلقائي على رسائل صفحتك وتعليقات المنشورات.</p>
-                </div>
-                
-                <div class="bg-slate-50 p-4 rounded-xl border border-slate-100 flex items-center justify-between">
-                    <span id="fb_status" class="font-bold text-slate-500">غير متصل</span>
-                    <button id="fb_btn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-lg transition shadow-sm text-sm">ربط الصفحة</button>
-                </div>
-            </div>
-
-        </div>
-    </main>
-
-    <script src="config.js"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', async () => {
-            const token = localStorage.getItem('whatsauto_token');
-            if (!token) {
-                window.location.href = 'login.html';
-                return;
-            }
-
-            // Logout
-            document.querySelectorAll('a[href="login.html"]').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    localStorage.removeItem('whatsauto_token');
-                });
-            });
-
-            // Elements
-            const waStatus = document.getElementById('wa_status');
-            const waBtn = document.getElementById('wa_btn');
-            const fbStatus = document.getElementById('fb_status');
-            const fbBtn = document.getElementById('fb_btn');
-
-            async function loadChannels() {
-                try {
-                    const res = await fetch(API_BASE_URL + '/api/channels/', {
-                        headers: { 'Authorization': `Bearer ${token}` }
-                    });
-                    if (res.ok) {
-                        const channels = await res.json();
-                        channels.forEach(ch => {
-                            if (ch.platform === 'whatsapp' && ch.is_active) {
-                                waStatus.textContent = 'متصل';
-                                waStatus.className = 'font-bold text-green-600';
-                                waBtn.textContent = 'تعديل الربط';
-                                waBtn.className = 'bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold py-2 px-6 rounded-lg transition shadow-sm text-sm';
-                            }
-                            if (ch.platform === 'facebook' && ch.is_active) {
-                                fbStatus.textContent = 'متصل';
-                                fbStatus.className = 'font-bold text-blue-600';
-                                fbBtn.textContent = 'تعديل الربط';
-                                fbBtn.className = 'bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold py-2 px-6 rounded-lg transition shadow-sm text-sm';
-                            }
-                        });
-                    } else if (res.status === 401) {
-                        window.location.href = 'login.html';
-                    }
-                } catch (e) {
-                    console.error('Error fetching channels', e);
-                }
-            }
-
-            async function connectChannel(platform) {
-                const channelId = prompt(`أدخل معرف ${platform === 'whatsapp' ? 'الواتساب (رقم الهاتف)' : 'صفحة الفيسبوك'}:`);
-                if (!channelId) return;
-
-                try {
-                    const res = await fetch(API_BASE_URL + '/api/channels/', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'Authorization': `Bearer ${token}`
-                        },
-                        body: JSON.stringify({ platform, channel_id: channelId })
-                    });
-
-                    if (res.ok) {
-                        alert('تم ربط الحساب بنجاح!');
-                        loadChannels();
-                    } else {
-                        alert('حدث خطأ أثناء الربط.');
-                    }
-                } catch (e) {
-                    alert('خطأ في الاتصال.');
-                }
-            }
-
-            waBtn.addEventListener('click', () => connectChannel('whatsapp'));
-            fbBtn.addEventListener('click', () => connectChannel('facebook'));
-
-            loadChannels();
-        });
-    </script>
-</body>
-</html>
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>القنوات - WhatsAuto</title><script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet"><style>body{font-family:Cairo,sans-serif}</style></head>
+<body class="bg-slate-50 min-h-screen text-slate-900">
+<div class="max-w-5xl mx-auto p-6 md:p-10">
+<header class="flex justify-between items-center mb-8"><a href="dashboard.html" class="text-2xl font-extrabold text-blue-600">WhatsAuto</a><a href="login.html" id="logout" class="text-red-500 font-semibold">تسجيل الخروج</a></header>
+<h1 class="text-3xl font-extrabold mb-2">ربط القنوات</h1>
+<p class="text-slate-500 mb-8">أدخل بيانات Meta الرسمية للحساب أو الصفحة. لا تستخدم كلمة مرور حسابك.</p>
+<div class="grid md:grid-cols-2 gap-6">
+<section class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm">
+<h2 class="text-xl font-bold mb-5">واتساب للأعمال</h2>
+<label class="block font-semibold mb-1">Phone Number ID<input id="whatsapp_id" class="mt-2 w-full p-3 border rounded-xl ltr" dir="ltr"></label>
+<label class="block font-semibold mt-4 mb-1">Access Token<input id="whatsapp_token" type="password" class="mt-2 w-full p-3 border rounded-xl" dir="ltr" placeholder="يتم تشفيره قبل التخزين"></label>
+<button data-platform="whatsapp" class="connect mt-5 w-full bg-blue-600 text-white font-bold py-3 rounded-xl">حفظ وربط</button>
+<p id="whatsapp_status" class="text-sm mt-3 text-slate-500">غير متصل</p>
+</section><section class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm">
+<h2 class="text-xl font-bold mb-5">فيسبوك / Messenger</h2>
+<label class="block font-semibold mb-1">Page ID<input id="facebook_id" class="mt-2 w-full p-3 border rounded-xl ltr" dir="ltr"></label>
+<label class="block font-semibold mt-4 mb-1">Access Token<input id="facebook_token" type="password" class="mt-2 w-full p-3 border rounded-xl" dir="ltr" placeholder="يتم تشفيره قبل التخزين"></label>
+<button data-platform="facebook" class="connect mt-5 w-full bg-blue-600 text-white font-bold py-3 rounded-xl">حفظ وربط</button>
+<p id="facebook_status" class="text-sm mt-3 text-slate-500">غير متصل</p>
+</section>
+</div>
+<div class="mt-6 bg-amber-50 border border-amber-200 rounded-2xl p-5 text-sm text-amber-900">
+<strong>مهم:</strong> هذه الشاشة تحفظ الـAccess Token مشفراً، لكن الربط الفعلي يحتاج Meta App وWebhooks مفعلة على حسابك.
+</div>
+</div>
+<script src="config.js"></script><script>
+const token=localStorage.getItem('whatsauto_token');if(!token)location.href='login.html';
+document.getElementById('logout').onclick=()=>localStorage.removeItem('whatsauto_token');
+async function load(){const r=await fetch(API_BASE_URL+'/api/channels/',{headers:{Authorization:'Bearer '+token}});if(r.status===401){location.href='login.html';return}const ds=await r.json();ds.forEach(c=>{const s=document.getElementById(c.platform+'_status');if(s){s.textContent=c.is_active?'متصل':'متوقف';s.className='text-sm mt-3 '+(c.is_active?'text-green-600':'text-slate-500')}})}
+document.querySelectorAll('.connect').forEach(btn=>btn.onclick=async()=>{const p=btn.dataset.platform,id=document.getElementById(p+'_id').value.trim(),tok=document.getElementById(p+'_token').value.trim();if(!id||!tok){alert('أدخل المعرّف والـAccess Token');return}btn.disabled=true;btn.textContent='جاري الحفظ...';const r=await fetch(API_BASE_URL+'/api/channels/',{method:'POST',headers:{'Content-Type':'application/json',Authorization:'Bearer '+token},body:JSON.stringify({platform:p,channel_id:id,token:tok})});alert(r.ok?'تم حفظ بيانات القناة. اختبر Webhook بعد إعداد Meta.':'فشل حفظ القناة');btn.disabled=false;btn.textContent='حفظ وربط';if(r.ok){document.getElementById(p+'_token').value='';load()}});
+load();
+</script></body></html>

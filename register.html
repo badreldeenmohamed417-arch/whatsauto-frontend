@@ -45,6 +45,7 @@
         </div>
     </div>
 
+    <script src="config.js"></script>
     <script>
         document.getElementById('registerForm').addEventListener('submit', async function(e) {
             e.preventDefault();
@@ -55,7 +56,7 @@
             btn.disabled = true;
 
             try {
-                const res = await fetch('http://127.0.0.1:8000/api/auth/register', {
+                const res = await fetch(API_BASE_URL + '/api/auth/register', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ email, password })
@@ -68,7 +69,7 @@
                     const formData = new URLSearchParams();
                     formData.append('username', email);
                     formData.append('password', password);
-                    const loginRes = await fetch('http://127.0.0.1:8000/api/auth/login', {
+                    const loginRes = await fetch(API_BASE_URL + '/api/auth/login', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
                         body: formData
@@ -79,7 +80,7 @@
                         
                         // Set the company name initially
                         const companyName = e.target.elements[0].value;
-                        await fetch('http://127.0.0.1:8000/api/settings/bot', {
+                        await fetch(API_BASE_URL + '/api/settings/bot', {
                             method: 'PUT',
                             headers: {
                                 'Content-Type': 'application/json',

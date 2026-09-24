@@ -82,6 +82,7 @@
         </div>
     </main>
 
+    <script src="config.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', async () => {
             const token = localStorage.getItem('whatsauto_token');
@@ -104,7 +105,7 @@
 
             // Fetch current settings
             try {
-                const res = await fetch('http://127.0.0.1:8000/api/settings/bot', {
+                const res = await fetch(API_BASE_URL + '/api/settings/bot', {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
                 if (res.ok) {
@@ -125,7 +126,7 @@
                 saveBtn.disabled = true;
                 
                 try {
-                    const res = await fetch('http://127.0.0.1:8000/api/settings/bot', {
+                    const res = await fetch(API_BASE_URL + '/api/settings/bot', {
                         method: 'PUT',
                         headers: {
                             'Content-Type': 'application/json',

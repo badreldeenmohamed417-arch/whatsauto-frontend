@@ -1,158 +1,53 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>الإعدادات - WhatsAuto</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
-    <style>
-        body { font-family: 'Cairo', sans-serif; }
-        .dir-ltr { direction: ltr; display: inline-block; }
-    </style>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>الإعدادات - WhatsAuto</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>body{font-family:Cairo,sans-serif}</style>
 </head>
-<body class="bg-slate-50 text-slate-900 flex min-h-screen">
-
-    <!-- Sidebar -->
-    <aside class="w-64 bg-white border-l border-slate-200 h-screen p-6 hidden md:flex md:flex-col fixed sticky top-0">
-        <div class="text-2xl font-bold text-blue-600 mb-10"><a href="index.html">WhatsAuto</a></div>
-        <nav class="space-y-2 flex-1">
-            <a href="dashboard.html" class="block px-4 py-2 text-slate-600 hover:bg-slate-50 rounded-lg transition font-medium">الرئيسية</a>
-            <a href="settings.html" class="block px-4 py-2 bg-blue-50 text-blue-600 rounded-lg font-bold transition">الإعدادات</a>
-            <a href="channels.html" class="block px-4 py-2 text-slate-600 hover:bg-slate-50 rounded-lg transition font-medium">القنوات (WhatsApp & FB)</a>
-        </nav>
-        <div class="mt-auto">
-            <a href="login.html" class="block px-4 py-2 text-red-500 hover:bg-red-50 rounded-lg transition font-medium text-center">تسجيل الخروج</a>
-        </div>
-    </aside>
-
-    <!-- Main Content -->
-    <main class="flex-1 p-6 md:p-10 w-full overflow-y-auto">
-        
-        <!-- Mobile Header -->
-        <header class="flex md:hidden justify-between items-center mb-8 border-b pb-4">
-            <div class="text-xl font-bold text-blue-600">WhatsAuto</div>
-            <a href="login.html" class="text-red-500 font-medium text-sm">تسجيل الخروج</a>
-        </header>
-
-        <header class="mb-10 hidden md:block">
-            <h1 class="text-3xl font-bold text-slate-800">الإعدادات</h1>
-        </header>
-
-        <div class="max-w-2xl bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
-            <form class="space-y-6">
-                <!-- Company Info -->
-                <div>
-                    <h2 class="text-xl font-bold mb-4 text-slate-800">معلومات الشركة</h2>
-                    <div class="space-y-4">
-                        <div>
-                            <label class="block text-sm font-semibold text-slate-700 mb-1">اسم الشركة</label>
-                            <input type="text" id="company_name" value="" class="w-full p-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none transition" />
-                        </div>
-                        <div>
-                            <label class="block text-sm font-semibold text-slate-700 mb-1">نبذة عن منتجاتك أو خدماتك (يستخدمها البوت للرد)</label>
-                            <textarea id="system_prompt" rows="4" class="w-full p-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none transition" placeholder="نحن شركة تبيع الملابس الجاهزة..."></textarea>
-                        </div>
-                    </div>
-                </div>
-
-                <hr class="border-slate-100">
-
-                <!-- Bot Tone Settings -->
-                <div>
-                    <h2 class="text-xl font-bold mb-4 text-slate-800">شخصية البوت</h2>
-                    <div class="space-y-4">
-                        <div>
-                            <label class="block text-sm font-semibold text-slate-700 mb-1">أسلوب الرد</label>
-                            <select id="tone" class="w-full p-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none transition bg-white">
-                                <option value="professional">رسمي ومهني (Professional)</option>
-                                <option value="friendly">ودود ومرحب (Friendly)</option>
-                                <option value="casual">مرح وغير رسمي (Casual)</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-
-                <hr class="border-slate-100">
-                
-                <div class="flex justify-end pt-2">
-                    <button type="button" id="save_btn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-lg shadow-sm transition">حفظ الإعدادات</button>
-                </div>
-            </form>
-        </div>
-    </main>
-
-    <script src="config.js"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', async () => {
-            const token = localStorage.getItem('whatsauto_token');
-            if (!token) {
-                window.location.href = 'login.html';
-                return;
-            }
-
-            // Logout
-            document.querySelectorAll('a[href="login.html"]').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    localStorage.removeItem('whatsauto_token');
-                });
-            });
-
-            const companyInput = document.getElementById('company_name');
-            const promptInput = document.getElementById('system_prompt');
-            const toneSelect = document.getElementById('tone');
-            const saveBtn = document.getElementById('save_btn');
-
-            // Fetch current settings
-            try {
-                const res = await fetch(API_BASE_URL + '/api/settings/bot', {
-                    headers: { 'Authorization': `Bearer ${token}` }
-                });
-                if (res.ok) {
-                    const data = await res.json();
-                    companyInput.value = data.company_name;
-                    promptInput.value = data.system_prompt;
-                    toneSelect.value = data.tone;
-                } else if (res.status === 401) {
-                    window.location.href = 'login.html';
-                }
-            } catch (e) {
-                console.error('Error fetching settings:', e);
-            }
-
-            // Save settings
-            saveBtn.addEventListener('click', async () => {
-                saveBtn.textContent = 'جاري الحفظ...';
-                saveBtn.disabled = true;
-                
-                try {
-                    const res = await fetch(API_BASE_URL + '/api/settings/bot', {
-                        method: 'PUT',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'Authorization': `Bearer ${token}`
-                        },
-                        body: JSON.stringify({
-                            company_name: companyInput.value,
-                            system_prompt: promptInput.value,
-                            tone: toneSelect.value,
-                            is_active: true
-                        })
-                    });
-                    
-                    if (res.ok) {
-                        alert('تم حفظ الإعدادات بنجاح!');
-                    } else {
-                        alert('حدث خطأ أثناء الحفظ.');
-                    }
-                } catch (e) {
-                    alert('خطأ في الاتصال بالخادم.');
-                } finally {
-                    saveBtn.textContent = 'حفظ الإعدادات';
-                    saveBtn.disabled = false;
-                }
-            });
-        });
-    </script>
-</body>
-</html>
+<body class="bg-slate-50 text-slate-900 min-h-screen">
+<div class="max-w-5xl mx-auto p-6 md:p-10">
+<header class="flex justify-between items-center mb-8">
+<a href="dashboard.html" class="text-2xl font-extrabold text-blue-600">WhatsAuto</a>
+<a href="login.html" id="logout" class="text-red-500 font-semibold">تسجيل الخروج</a>
+</header>
+<h1 class="text-3xl font-extrabold mb-2">إعدادات البوت</h1>
+<p class="text-slate-500 mb-8">هذه البيانات هي التي يعتمد عليها البوت عند الرد على عملائك.</p>
+<div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm">
+<div class="grid gap-5">
+<label>اسم الشركة<input id="company_name" class="mt-2 w-full p-3 border rounded-xl"></label>
+<label>وصف الشركة<textarea id="description" rows="4" class="mt-2 w-full p-3 border rounded-xl" placeholder="ما الذي تقدمه الشركة؟"></textarea></label>
+<label>المنتجات والخدمات<textarea id="products" rows="6" class="mt-2 w-full p-3 border rounded-xl" placeholder="اكتب المنتجات والأسعار والمعلومات التي يستطيع البوت استخدامها..."></textarea></label>
+<label>تعليمات إضافية<textarea id="instructions" rows="4" class="mt-2 w-full p-3 border rounded-xl" placeholder="مثلاً: لا تذكر الخصومات إلا عند السؤال عنها."></textarea></label>
+<div class="grid md:grid-cols-2 gap-5">
+<label>لهجة الرد<select id="tone" class="mt-2 w-full p-3 border rounded-xl bg-white">
+<option value="مصري عامي">مصري عامي</option><option value="خليجي">خليجي</option><option value="رسمي">رسمي</option>
+</select></label>
+<label>رقم التحويل لموظف<input id="handover_number" class="mt-2 w-full p-3 border rounded-xl" placeholder="2010..."></label>
+</div>
+<label class="flex items-center gap-3"><input id="is_active" type="checkbox" class="w-5 h-5" checked><span>تفعيل الرد الآلي</span></label>
+<button id="save" class="bg-blue-600 text-white font-bold py-3 rounded-xl hover:bg-blue-700">حفظ الإعدادات</button>
+<p id="status" class="text-sm text-center"></p>
+</div></div></div>
+<script src="config.js"></script>
+<script>
+const token=localStorage.getItem('whatsauto_token'); if(!token) location.href='login.html';
+document.getElementById('logout').onclick=()=>localStorage.removeItem('whatsauto_token');
+const ids=['company_name','description','products','instructions','tone','handover_number','is_active'];
+async function load(){
+ const r=await fetch(API_BASE_URL+'/api/settings/bot',{headers:{Authorization:'Bearer '+token}});
+ if(r.status===401){location.href='login.html';return}
+ const d=await r.json(); ids.forEach(id=>{const e=document.getElementById(id); if(e.type==='checkbox')e.checked=d.is_active; else e.value=d[id]||''});
+}
+document.getElementById('save').onclick=async()=>{
+ const b=document.getElementById('save'),s=document.getElementById('status'); b.disabled=true;b.textContent='جاري الحفظ...';
+ const body={};ids.forEach(id=>{const e=document.getElementById(id);body[id]=e.type==='checkbox'?e.checked:e.value});
+ const r=await fetch(API_BASE_URL+'/api/settings/bot',{method:'PUT',headers:{'Content-Type':'application/json',Authorization:'Bearer '+token},body:JSON.stringify(body)});
+ s.textContent=r.ok?'تم حفظ الإعدادات':'حدث خطأ أثناء الحفظ';s.className=r.ok?'text-green-600 text-sm text-center':'text-red-600 text-sm text-center';
+ b.disabled=false;b.textContent='حفظ الإعدادات';
+};
+load();
+</script>
+</body></html>

@@ -20,7 +20,7 @@
 <label>اسم الشركة<input id="company_name" class="mt-2 w-full p-3 border rounded-xl"></label>
 <label>وصف الشركة<textarea id="description" rows="4" class="mt-2 w-full p-3 border rounded-xl" placeholder="ما الذي تقدمه الشركة؟"></textarea></label>
 <div><div class="flex justify-between items-center"><label class="font-semibold">المنتجات والخدمات</label><button type="button" id="addProduct" class="px-4 py-2 rounded-xl bg-slate-900 text-white font-bold">+ إضافة منتج</button></div><p class="text-sm text-slate-500 mt-1 mb-3">أضف اسم المنتج ووصفه وسعره وكلمات تساعد الـAI على التعرف عليه.</p><div id="productsList" class="space-y-3"></div></div><textarea id="products" class="hidden"></textarea>
-<label>تعليمات إضافية<textarea id="instructions" rows="4" class="mt-2 w-full p-3 border rounded-xl" placeholder="مثلاً: لا تذكر الخصومات إلا عند السؤال عنها."></textarea></label>
+<label>ماذا تريد من الـAI أن يفعل؟<textarea id="instructions" rows="7" class="mt-2 w-full p-3 border rounded-xl" placeholder="مثال: لو حد قال صلي على النبي رد عليه: عليه الصلاة والسلام. لو التعليق عن شراء منتج أو سعره، رد عليه في الخاص. التعليقات العامة العادية رد عليها في التعليق. لو محتاج موظف، حوّله للرقم الموجود."></textarea><p class="text-sm text-slate-500 mt-2">الـAI يحوّل التعليمات دي تلقائياً إلى Action عند وصول كل رسالة أو تعليق.</p></label>
 <div class="grid md:grid-cols-2 gap-5">
 <label>لهجة الرد<select id="tone" class="mt-2 w-full p-3 border rounded-xl bg-white">
 <option value="مصري عامي">مصري عامي</option><option value="خليجي">خليجي</option><option value="رسمي">رسمي</option>

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>تسجيل الدخول - WhatsAuto</title>
+    <title>تسجيل الدخول - Repleyo</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
@@ -17,7 +17,7 @@
     <div class="flex-1 flex items-center justify-center p-6">
         <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-100 w-full max-w-md">
             <div class="text-center mb-8">
-                <a href="index.html" class="text-3xl font-bold text-blue-600 mb-2 block hover:opacity-80 transition">WhatsAuto</a>
+                <a href="index.html" class="text-3xl font-bold text-blue-600 mb-2 block hover:opacity-80 transition">Repleyo</a>
                 <p class="text-slate-500">تسجيل الدخول لحسابك</p>
             </div>
 
@@ -63,7 +63,7 @@
                 const data = await res.json();
                 
                 if (res.ok) {
-                    localStorage.setItem('whatsauto_token', data.access_token);
+                    localStorage.setItem('repleyo_token', data.access_token);
                     window.location.href = 'dashboard.html';
                 } else {
                     let errorMsg = 'فشل تسجيل الدخول. يرجى التحقق من البيانات.';
@@ -80,5 +80,5 @@
             }
         });
     </script>
-</body>
+<script src="i18n.js"></script></body>
 </html>

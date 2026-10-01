@@ -57,7 +57,7 @@ function renderProducts(){
 }
 async function compressImage(file,targetBytes,maxSide){
  if(file.size<=targetBytes && file.type==='image/webp')return await fileToDataURL(file);
- const bitmap=await createImageBitmap(file);const scale=Math.min(1,maxSide/Math.max(bitmap.width,bitmap.height));const w=Math.max(1,Math.round(bitmap.width*scale)),h=Math.max(1,Math.round(bitmap.height*scale));const canvas=document.createElement('canvas');canvas.width=w;canvas.height=h;canvas.getContext('2d').drawImage(bitmap,0,0,w,h);bitmap.close();
+ const bitmap=await createImageBitmap(file);const scale=Math.min(1,maxSide/Math.max(bitmap.width,bitmap.height));const w=Math.max(1,Math.round(bitmap.width*scale)),h=Math.max(1,Math.round(bitmap.height*scale));const canvas=document.createElement('canvas');canvas.width=w;canvas.height=h;canvas.getContext('2d').drawImage(bitmap,0,0,w,h);
  let type='image/webp',quality=.82,blob=await canvasToBlob(canvas,type,quality);
  if(!blob){type='image/jpeg';quality=.82;blob=await canvasToBlob(canvas,type,quality)}
  for(let i=0;i<7 && blob.size>targetBytes;i++){quality-=.09;blob=await canvasToBlob(canvas,type,Math.max(.35,quality))}

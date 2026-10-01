@@ -1,112 +1,15 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>إنشاء حساب - WhatsAuto</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
-    <style>
-        body { font-family: 'Cairo', sans-serif; }
-        .dir-ltr { direction: ltr; }
-    </style>
-<link rel="stylesheet" href="styles.css">
-</head>
+<html lang="ar" dir="rtl"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>إنشاء حساب - WhatsAuto</title><script src="https://cdn.tailwindcss.com"></script><link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet"><style>body{font-family:Cairo,sans-serif}.dir-ltr{direction:ltr}</style><link rel="stylesheet" href="styles.css"></head>
 <body class="bg-slate-50 text-slate-900 flex flex-col min-h-screen">
-
-    <div class="flex-1 flex items-center justify-center p-6 py-12">
-        <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-100 w-full max-w-md">
-            <div class="text-center mb-8">
-                <a href="index.html" class="text-3xl font-bold text-blue-600 mb-2 block hover:opacity-80 transition">WhatsAuto</a>
-                <p class="text-slate-500">إنشاء حساب جديد</p>
-            </div>
-
-            <form id="registerForm" class="space-y-4">
-                <div>
-                    <label class="block text-sm font-semibold text-slate-700 mb-1">اسم الشركة / الصفحة</label>
-                    <input type="text" required class="w-full p-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none transition" placeholder="شركتي للتجارة" />
-                </div>
-                <div>
-                    <label class="block text-sm font-semibold text-slate-700 mb-1">البريد الإلكتروني</label>
-                    <input type="email" required class="w-full p-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none dir-ltr transition" placeholder="email@example.com" />
-                </div>
-                <div>
-                    <label class="block text-sm font-semibold text-slate-700 mb-1">كلمة المرور</label>
-                    <input type="password" required class="w-full p-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none dir-ltr transition" placeholder="••••••••" />
-                </div>
-                
-                <button type="submit" class="w-full py-3 mt-4 bg-blue-600 text-white rounded-lg font-bold hover:bg-blue-700 transition shadow">
-                    إنشاء الحساب
-                </button>
-            </form>
-
-            <div class="mt-6 text-center text-sm">
-                <p class="text-slate-600">لديك حساب بالفعل؟ <a href="login.html" class="text-blue-600 font-bold hover:underline">تسجيل الدخول</a></p>
-            </div>
-        </div>
-    </div>
-
-    <script src="config.js"></script>
-    <script>
-        document.getElementById('registerForm').addEventListener('submit', async function(e) {
-            e.preventDefault();
-            const email = e.target.elements[1].value;
-            const password = e.target.elements[2].value;
-            const btn = e.target.querySelector('button');
-            btn.textContent = 'جاري الإنشاء...';
-            btn.disabled = true;
-
-            try {
-                const res = await fetch(API_BASE_URL + '/api/auth/register', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ email, password })
-                });
-                
-                const data = await res.json();
-                
-                if (res.ok) {
-                    // Also login directly to get token
-                    const loginRes = await fetch(API_BASE_URL + '/api/auth/login', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ email: email, password: password })
-                    });
-                    if (loginRes.ok) {
-                        const loginData = await loginRes.json();
-                        localStorage.setItem('whatsauto_token', loginData.access_token);
-                        
-                        // Set the company name initially
-                        const companyName = e.target.elements[0].value;
-                        await fetch(API_BASE_URL + '/api/settings/bot', {
-                            method: 'PUT',
-                            headers: {
-                                'Content-Type': 'application/json',
-                                'Authorization': `Bearer ${loginData.access_token}`
-                            },
-                            body: JSON.stringify({
-                                company_name: companyName,
-                                system_prompt: "أنت مساعد ذكي للمبيعات وخدمة العملاء.",
-                                tone: "professional",
-                                is_active: true
-                            })
-                        });
-                        window.location.href = 'dashboard.html';
-                    }
-                } else {
-                    let errorMsg = 'فشل التسجيل. البريد مستخدم مسبقاً؟';
-                    if (data && data.detail) {
-                        errorMsg = typeof data.detail === 'string' ? data.detail : JSON.stringify(data.detail);
-                    }
-                    alert(errorMsg);
-                }
-            } catch (err) {
-                alert('خطأ في الاتصال بالخادم.');
-            } finally {
-                btn.textContent = 'إنشاء الحساب';
-                btn.disabled = false;
-            }
-        });
-    </script>
-</body>
-</html>
+<div class="flex-1 flex items-center justify-center p-6 py-12"><div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-100 w-full max-w-md">
+<div class="text-center mb-8"><a href="index.html" class="text-3xl font-bold text-blue-600 mb-2 block">WhatsAuto</a><p class="text-slate-500">إنشاء حساب جديد</p></div>
+<form id="registerForm" class="space-y-4">
+<div><label class="block text-sm font-semibold text-slate-700 mb-1">اسم الشركة / الصفحة</label><input id="company" type="text" required class="w-full p-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none" placeholder="شركتي للتجارة"></div>
+<div><label class="block text-sm font-semibold text-slate-700 mb-1">البريد الإلكتروني</label><input id="email" type="email" required class="w-full p-3 border border-slate-300 rounded-lg dir-ltr"></div>
+<div><label class="block text-sm font-semibold text-slate-700 mb-1">كلمة المرور</label><input id="password" type="password" minlength="6" required class="w-full p-3 border border-slate-300 rounded-lg dir-ltr" placeholder="••••••••"></div>
+<button type="submit" class="w-full py-3 mt-4 bg-blue-600 text-white rounded-lg font-bold">إنشاء الحساب والمتابعة</button></form>
+<div class="mt-6 text-center text-sm"><p class="text-slate-600">لديك حساب بالفعل؟ <a href="login.html" class="text-blue-600 font-bold hover:underline">تسجيل الدخول</a></p></div>
+</div></div>
+<script src="config.js"></script><script>
+document.getElementById('registerForm').addEventListener('submit',async e=>{e.preventDefault();const company=document.getElementById('company').value.trim(),email=document.getElementById('email').value.trim(),password=document.getElementById('password').value,btn=e.target.querySelector('button');btn.textContent='جاري إنشاء الحساب...';btn.disabled=true;try{const res=await fetch(API_BASE_URL+'/api/auth/register',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email,password})});const data=await res.json();if(!res.ok){alert(typeof data.detail==='string'?data.detail:'فشل التسجيل. البريد مستخدم مسبقاً؟');return}const loginRes=await fetch(API_BASE_URL+'/api/auth/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email,password})});if(!loginRes.ok){alert('تم إنشاء الحساب. سجل الدخول لإكمال الإعداد.');location.href='login.html';return}const loginData=await loginRes.json();localStorage.setItem('whatsauto_token',loginData.access_token);sessionStorage.setItem('whatsauto_setup_company',company);location.href='settings.html?setup=1';}catch(err){alert('خطأ في الاتصال بالخادم.')}finally{btn.textContent='إنشاء الحساب والمتابعة';btn.disabled=false}});
+</script></body></html>

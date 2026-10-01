@@ -1,17 +1,26 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>لوحة التحكم - WhatsAuto</title><script src="https://cdn.tailwindcss.com"></script><link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet"><style>body{font-family:Cairo,sans-serif}</style><link rel="stylesheet" href="styles.css">
-</head>
-<body class="bg-slate-50 min-h-screen text-slate-900"><div class="max-w-6xl mx-auto p-6 md:p-10">
-<header class="flex justify-between items-center mb-10"><a href="index.html" class="text-2xl font-extrabold text-blue-600">WhatsAuto</a><a href="login.html" id="logout" class="text-red-500 font-semibold">تسجيل الخروج</a></header>
-<div class="whatsauto-nav flex flex-wrap gap-3 mb-8"><a href="settings.html" class="px-4 py-2 bg-white border rounded-xl">الإعدادات</a><a href="channels.html" class="px-4 py-2 bg-white border rounded-xl">القنوات</a><a href="chats.html" class="px-4 py-2 bg-white border rounded-xl">المحادثات</a></div>
+<title>لوحة التحكم - WhatsAuto</title><script src="https://cdn.tailwindcss.com"></script><link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet"><style>body{font-family:Cairo,sans-serif}</style><link rel="stylesheet" href="styles.css"></head>
+<body class="bg-slate-50 text-slate-900">
+<aside id="sidebar" class="app-sidebar">
+<a href="dashboard.html" class="app-brand">WhatsAuto</a>
+<nav class="app-nav"><a class="active" href="dashboard.html">⌂ <span>الرئيسية</span></a><a href="settings.html">⚙ <span>الإعدادات</span></a><a href="channels.html">◉ <span>القنوات</span></a><a href="chats.html">▣ <span>المحادثات</span></a></nav>
+<div class="app-sidebar-footer"><a href="login.html" id="logout" class="app-nav app-logout">↪ <span>تسجيل الخروج</span></a></div>
+</aside>
+<div id="overlay" class="sidebar-overlay"></div>
+<main class="app-main"><div class="max-w-6xl mx-auto p-6 md:p-10">
+<div class="app-topbar"><button class="sidebar-toggle" id="menuBtn" aria-label="فتح القائمة">☰</button><span class="app-mobile-brand">WhatsAuto</span><span></span></div>
+<div id="setupNotice" class="setup-banner hidden"><strong>أكمل إعداد البوت أولاً.</strong> أضف بيانات نشاطك ومنتجاً واحداً على الأقل حتى يستطيع WhatsAuto الرد على العملاء بشكل صحيح. <a href="settings.html" class="font-bold underline">إكمال الإعداد</a></div>
 <h1 class="text-3xl font-extrabold mb-8">لوحة التحكم</h1>
 <div class="grid md:grid-cols-3 gap-6">
 <section class="bg-white border rounded-2xl p-6 shadow-sm md:col-span-2"><h2 class="font-bold text-xl mb-4">الاشتراك</h2><div class="flex items-center gap-3"><span id="dot" class="w-3 h-3 rounded-full bg-slate-400"></span><span id="status" class="font-bold">جاري التحميل...</span></div><p id="expires" class="text-slate-500 mt-2"></p><div class="mt-6 bg-slate-50 rounded-xl p-4"><p class="font-semibold mb-3">التفعيل والتجديد يدوي حالياً</p><a target="_blank" href="https://wa.me/201038387558?text=أريد%20تفعيل%20أو%20تجديد%20اشتراك%20WhatsAuto" class="block text-center bg-green-600 text-white font-bold py-3 rounded-xl">تواصل عبر WhatsApp: 01038387558</a><p class="text-center text-sm text-slate-500 mt-2">Telegram: 01038387558</p></div></section>
 <section class="bg-white border rounded-2xl p-6 shadow-sm"><h2 class="font-bold text-xl mb-4">البوت</h2><p id="bot" class="text-slate-500">جاري التحميل...</p><a href="settings.html" class="inline-block mt-6 text-blue-600 font-bold">تعديل الإعدادات ←</a></section>
-</div></div>
+</div></div></main>
 <script src="config.js"></script><script>
-const token=localStorage.getItem('whatsauto_token');if(!token)location.href='login.html';document.getElementById('logout').onclick=()=>localStorage.removeItem('whatsauto_token');
-async function load(){const h={Authorization:'Bearer '+token};const [s,b]=await Promise.all([fetch(API_BASE_URL+'/api/settings/subscription',{headers:h}),fetch(API_BASE_URL+'/api/settings/bot',{headers:h})]);if(s.status===401){location.href='login.html';return}const sd=await s.json(),bd=await b.json();const active=sd.status==='ACTIVE';document.getElementById('status').textContent=active?'الاشتراك فعال':'الاشتراك منتهي';document.getElementById('status').className='font-bold '+(active?'text-green-600':'text-red-600');document.getElementById('dot').className='w-3 h-3 rounded-full '+(active?'bg-green-500':'bg-red-500');document.getElementById('expires').textContent=sd.expires_at?('ينتهي في '+new Date(sd.expires_at).toLocaleDateString('ar-EG')+' • متبقي '+sd.days_remaining+' يوم'):'لم يتم تفعيل الاشتراك بعد';document.getElementById('bot').textContent=!active?'متوقف حتى يتم تفعيل الاشتراك':(bd.is_active?'يعمل تلقائياً':'متوقف يدوياً');}
+const token=localStorage.getItem('whatsauto_token');if(!token)location.href='login.html';
+document.getElementById('logout').onclick=()=>localStorage.removeItem('whatsauto_token');
+const menuBtn=document.getElementById('menuBtn'),sidebar=document.getElementById('sidebar'),overlay=document.getElementById('overlay');
+function toggleMenu(){sidebar.classList.toggle('open');overlay.classList.toggle('open')} menuBtn.onclick=toggleMenu;overlay.onclick=toggleMenu;
+async function load(){const h={Authorization:'Bearer '+token};const [s,b]=await Promise.all([fetch(API_BASE_URL+'/api/settings/subscription',{headers:h}),fetch(API_BASE_URL+'/api/settings/bot',{headers:h})]);if(s.status===401){location.href='login.html';return}const sd=await s.json(),bd=await b.json();const active=sd.status==='ACTIVE';document.getElementById('status').textContent=active?'الاشتراك فعال':'الاشتراك منتهي';document.getElementById('status').className='font-bold '+(active?'text-green-600':'text-red-600');document.getElementById('dot').className='w-3 h-3 rounded-full '+(active?'bg-green-500':'bg-red-500');document.getElementById('expires').textContent=sd.expires_at?('ينتهي في '+new Date(sd.expires_at).toLocaleDateString('ar-EG')+' • متبقي '+sd.days_remaining+' يوم'):'لم يتم تفعيل الاشتراك بعد';document.getElementById('bot').textContent=!active?'متوقف حتى يتم تفعيل الاشتراك':(bd.is_active?'يعمل تلقائياً':'متوقف يدوياً');const complete=!!(bd.company_name&&bd.description&&JSON.parse(bd.products||'[]').some(p=>p.name&&p.description&&p.images&&p.images.length));if(!complete)document.getElementById('setupNotice').classList.remove('hidden');}
 load();
 </script></body></html>

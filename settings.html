@@ -50,7 +50,7 @@ function renderProducts(){
   card.querySelector('.remove').onclick=()=>{products.splice(index,1);renderProducts()};
   const grid=card.querySelector('.product-image-grid');
   function drawImages(){grid.innerHTML='';p.images.forEach((src,j)=>{const wrap=document.createElement('div');wrap.className='product-image';const img=document.createElement('img');img.src=src;img.alt=p.name||'صورة المنتج';const b=document.createElement('button');b.type='button';b.textContent='×';b.onclick=()=>{p.images.splice(j,1);drawImages()};wrap.append(img,b);grid.appendChild(wrap)})}
-  card.querySelector('.imageInput').onchange=async e=>{const files=[...e.target.files];if(!files.length)return;const st=card.querySelector('.imageStatus');st.textContent='جاري ضغط الصور...';try{for(const file of files.slice(0,4-p.images.length)){p.images.push(await compressImage(file,110*1024,1200))}st.textContent='تم تجهيز الصور بحجم مضغوط مناسب.';drawImages()}catch(err){st.textContent='تعذر ضغط إحدى الصور. جرّب صورة أخرى.'}e.target.value=''};
+  card.querySelector('.imageInput').onchange=async e=>{const files=[...e.target.files];if(!files.length)return;const st=card.querySelector('.imageStatus');st.textContent='جاري ضغط الصور...';try{for(const file of files.slice(0,4-p.images.length)){p.images.push(await compressImage(file,100*1024,1200))}st.textContent='تم تجهيز الصور بحجم مضغوط مناسب.';drawImages()}catch(err){st.textContent='تعذر ضغط إحدى الصور. جرّب صورة أخرى.'}e.target.value=''};
   [name,price,desc,keys].forEach(el=>el.oninput=()=>{p.name=name.value.trim();p.price=price.value.trim();p.description=desc.value.trim();p.keywords=keys.value.split(',').map(x=>x.trim()).filter(Boolean)});
   drawImages();box.appendChild(card);
  });

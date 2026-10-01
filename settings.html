@@ -1,16 +1,16 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>الإعدادات - WhatsAuto</title><script src="https://cdn.tailwindcss.com"></script>
+<title>الإعدادات - Repleyo</title><script src="https://cdn.tailwindcss.com"></script>
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet"><style>body{font-family:Cairo,sans-serif}</style>
 <link rel="stylesheet" href="styles.css"></head>
 <body class="bg-slate-50 text-slate-900 min-h-screen">
-<aside id="sidebar" class="app-sidebar"><a href="dashboard.html" class="app-brand">WhatsAuto</a>
+<aside id="sidebar" class="app-sidebar"><a href="dashboard.html" class="app-brand">Repleyo</a>
 <nav class="app-nav"><a href="dashboard.html">⌂ <span>الرئيسية</span></a><a class="active" href="settings.html">⚙ <span>الإعدادات</span></a><a href="channels.html">◉ <span>القنوات</span></a><a href="chats.html">▣ <span>المحادثات</span></a></nav>
 <div class="app-sidebar-footer"><a href="login.html" id="logout" class="app-nav app-logout">↪ <span>تسجيل الخروج</span></a></div></aside>
 <div id="overlay" class="sidebar-overlay"></div>
 <main class="app-main"><div class="max-w-5xl mx-auto p-6 md:p-10">
-<div class="app-topbar"><button class="sidebar-toggle" id="menuBtn" aria-label="فتح القائمة">☰</button><span class="app-mobile-brand">WhatsAuto</span><span></span></div>
+<div class="app-topbar"><button class="sidebar-toggle" id="menuBtn" aria-label="فتح القائمة">☰</button><span class="app-mobile-brand">Repleyo</span><span></span></div>
 <div id="setupBanner" class="setup-banner hidden"><strong>خطوة أخيرة قبل البدء.</strong> أكمل بيانات نشاطك وأضف منتجاتك وصورها. لا يمكنك تخطي هذه الخطوة لأن البوت يحتاجها لفهم نشاطك والرد على العملاء.</div>
 <h1 class="text-3xl font-extrabold mb-2">إعدادات البوت</h1>
 <p class="text-slate-500 mb-8">بيانات نشاطك ومنتجاتك هي مصدر معرفة البوت عند الرد على العملاء.</p>
@@ -31,9 +31,9 @@
 <p id="status" class="text-sm text-center min-h-5"></p>
 </div></div></div></main>
 <script src="config.js"></script><script>
-const token=localStorage.getItem('whatsauto_token');if(!token)location.href='login.html';
+const token=localStorage.getItem('repleyo_token');if(!token)location.href='login.html';
 const setupMode=new URLSearchParams(location.search).get('setup')==='1';
-const logout=document.getElementById('logout');logout.onclick=()=>localStorage.removeItem('whatsauto_token');
+const logout=document.getElementById('logout');logout.onclick=()=>localStorage.removeItem('repleyo_token');
 const menuBtn=document.getElementById('menuBtn'),sidebar=document.getElementById('sidebar'),overlay=document.getElementById('overlay');
 function toggleMenu(){sidebar.classList.toggle('open');overlay.classList.toggle('open')}menuBtn.onclick=toggleMenu;overlay.onclick=toggleMenu;
 if(setupMode)document.getElementById('setupBanner').classList.remove('hidden');
@@ -77,14 +77,14 @@ function validSetup(){
 document.getElementById('addProduct').onclick=()=>{products.push(makeProduct());renderProducts();setTimeout(()=>document.querySelector('#productsList>div:last-child .pname')?.focus(),50)};
 async function load(){
  const r=await fetch(API_BASE_URL+'/api/settings/bot',{headers:{Authorization:'Bearer '+token}});if(r.status===401){location.href='login.html';return}
- const d=await r.json();document.getElementById('company_name').value=d.company_name||sessionStorage.getItem('whatsauto_setup_company')||'';document.getElementById('description').value=d.description||'';document.getElementById('instructions').value=d.instructions||'';document.getElementById('tone').value=d.tone||'مصري عامي';document.getElementById('handover_number').value=d.handover_number||'';document.getElementById('is_active').checked=d.is_active!==false;
+ const d=await r.json();document.getElementById('company_name').value=d.company_name||sessionStorage.getItem('repleyo_setup_company')||'';document.getElementById('description').value=d.description||'';document.getElementById('instructions').value=d.instructions||'';document.getElementById('tone').value=d.tone||'مصري عامي';document.getElementById('handover_number').value=d.handover_number||'';document.getElementById('is_active').checked=d.is_active!==false;
  try{products=(JSON.parse(d.products||'[]')||[]).map(makeProduct)}catch{products=[]}renderProducts();
 }
 document.getElementById('save').onclick=async()=>{
  const b=document.getElementById('save'),s=document.getElementById('status'),err=validSetup();if(err){s.textContent=err;s.className='text-red-600 text-sm text-center min-h-5';return}
  b.disabled=true;b.textContent='جاري ضغط الصور وحفظ الإعدادات...';s.textContent='';
  const body={company_name:document.getElementById('company_name').value.trim(),description:document.getElementById('description').value.trim(),products:JSON.stringify(products),instructions:document.getElementById('instructions').value.trim(),tone:document.getElementById('tone').value,handover_number:document.getElementById('handover_number').value.trim(),is_active:document.getElementById('is_active').checked};
- try{const r=await fetch(API_BASE_URL+'/api/settings/bot',{method:'PUT',headers:{'Content-Type':'application/json',Authorization:'Bearer '+token},body:JSON.stringify(body)});if(!r.ok){s.textContent='حدث خطأ أثناء الحفظ';s.className='text-red-600 text-sm text-center min-h-5';return}s.textContent='تم الحفظ بنجاح';s.className='text-green-600 text-sm text-center min-h-5';sessionStorage.removeItem('whatsauto_setup_company');setTimeout(()=>location.href='dashboard.html',350)}catch{ s.textContent='تعذر الاتصال بالخادم';s.className='text-red-600 text-sm text-center min-h-5'}finally{b.disabled=false;b.textContent='حفظ والمتابعة'}
+ try{const r=await fetch(API_BASE_URL+'/api/settings/bot',{method:'PUT',headers:{'Content-Type':'application/json',Authorization:'Bearer '+token},body:JSON.stringify(body)});if(!r.ok){s.textContent='حدث خطأ أثناء الحفظ';s.className='text-red-600 text-sm text-center min-h-5';return}s.textContent='تم الحفظ بنجاح';s.className='text-green-600 text-sm text-center min-h-5';sessionStorage.removeItem('repleyo_setup_company');setTimeout(()=>location.href='dashboard.html',350)}catch{ s.textContent='تعذر الاتصال بالخادم';s.className='text-red-600 text-sm text-center min-h-5'}finally{b.disabled=false;b.textContent='حفظ والمتابعة'}
 };
 load();
-</script></body></html>
+</script><script src="i18n.js"></script></body></html>

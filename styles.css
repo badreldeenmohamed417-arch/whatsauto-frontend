@@ -1,0 +1,29 @@
+*{box-sizing:border-box}
+html{overflow-x:hidden}
+body{margin:0;overflow-x:hidden;-webkit-text-size-adjust:100%}
+img,svg{max-width:100%}
+button,a,input,textarea,select{font:inherit}
+input,textarea,select{min-height:44px;max-width:100%}
+button,a{touch-action:manipulation}
+@media (max-width:640px){
+  .max-w-5xl,.max-w-6xl,.container{width:100%;max-width:100%}
+  .p-6{padding:1rem!important}
+  .md\:p-10{padding:1rem!important}
+  header{gap:.75rem;flex-wrap:wrap}
+  header>a,.text-2xl{font-size:1.25rem}
+  h1,.text-3xl{font-size:1.65rem!important;line-height:1.35}
+  h2{line-height:1.4}
+  .grid{min-width:0}
+  .flex{min-width:0}
+  .flex.justify-between{align-items:center}
+  .w-full{width:100%!important}
+  .overflow-x-auto{-webkit-overflow-scrolling:touch}
+  .whatsauto-nav{display:grid!important;grid-template-columns:1fr 1fr;gap:.5rem!important}
+  .whatsauto-nav a{text-align:center;padding:.7rem .5rem!important}
+  .mobile-stack{flex-direction:column!important;align-items:stretch!important}
+  .mobile-stack>*{width:100%!important}
+  .hero-title{font-size:2rem!important}
+  .hero-copy{font-size:1rem!important}
+  .product-row{grid-template-columns:1fr!important}
+  .product-row .remove{grid-column:auto!important}
+}

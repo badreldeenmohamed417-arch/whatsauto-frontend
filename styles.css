@@ -77,3 +77,11 @@ html[data-theme="dark"] input,html[data-theme="dark"] textarea,html[data-theme="
 html[data-theme="dark"] .setup-banner{background:#172554;color:#bfdbfe;border-color:#1e40af}
 html[data-theme="dark"] .product-card{background:#0f172a}
 html[data-theme="dark"] footer{background:#020617!important}
+
+/* Utility controls live at the bottom of the sidebar */
+.app-sidebar .utility-bar{position:static;margin-top:auto;padding:12px 10px 0;justify-content:center;width:100%;}
+.app-sidebar .utility-bar button{background:var(--app-surface);color:var(--app-text);border-color:var(--app-border);}
+@media(max-width:640px){.app-sidebar .utility-bar{position:static;top:auto;right:auto;left:auto;margin-top:auto;padding-bottom:4px;}.sidebar-toggle{background:var(--app-surface);color:var(--app-text);border-color:var(--app-border);}}
+html[data-theme="dark"] .sidebar-toggle{background:#111827!important;color:#f8fafc!important;border-color:#334155!important;}
+html[data-theme="dark"] .app-sidebar{background:#111827!important;border-color:#334155!important;}
+html[data-theme="dark"] .app-nav a:hover,html[data-theme="dark"] .app-nav a.active{background:#1e293b;color:#93c5fd;}

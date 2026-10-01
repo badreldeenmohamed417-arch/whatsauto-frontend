@@ -1,58 +1,90 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
-<head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>الإعدادات - WhatsAuto</title>
-<script src="https://cdn.tailwindcss.com"></script>
-<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
-<style>body{font-family:Cairo,sans-serif}</style>
-<link rel="stylesheet" href="styles.css">
-</head>
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>الإعدادات - WhatsAuto</title><script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet"><style>body{font-family:Cairo,sans-serif}</style>
+<link rel="stylesheet" href="styles.css"></head>
 <body class="bg-slate-50 text-slate-900 min-h-screen">
-<div class="max-w-5xl mx-auto p-6 md:p-10">
-<header class="flex justify-between items-center mb-8">
-<a href="dashboard.html" class="text-2xl font-extrabold text-blue-600">WhatsAuto</a>
-<a href="login.html" id="logout" class="text-red-500 font-semibold">تسجيل الخروج</a>
-</header>
+<aside id="sidebar" class="app-sidebar"><a href="dashboard.html" class="app-brand">WhatsAuto</a>
+<nav class="app-nav"><a href="dashboard.html">⌂ <span>الرئيسية</span></a><a class="active" href="settings.html">⚙ <span>الإعدادات</span></a><a href="channels.html">◉ <span>القنوات</span></a><a href="chats.html">▣ <span>المحادثات</span></a></nav>
+<div class="app-sidebar-footer"><a href="login.html" id="logout" class="app-nav app-logout">↪ <span>تسجيل الخروج</span></a></div></aside>
+<div id="overlay" class="sidebar-overlay"></div>
+<main class="app-main"><div class="max-w-5xl mx-auto p-6 md:p-10">
+<div class="app-topbar"><button class="sidebar-toggle" id="menuBtn" aria-label="فتح القائمة">☰</button><span class="app-mobile-brand">WhatsAuto</span><span></span></div>
+<div id="setupBanner" class="setup-banner hidden"><strong>خطوة أخيرة قبل البدء.</strong> أكمل بيانات نشاطك وأضف منتجاتك وصورها. لا يمكنك تخطي هذه الخطوة لأن البوت يحتاجها لفهم نشاطك والرد على العملاء.</div>
 <h1 class="text-3xl font-extrabold mb-2">إعدادات البوت</h1>
-<p class="text-slate-500 mb-8">هذه البيانات هي التي يعتمد عليها البوت عند الرد على عملائك.</p>
+<p class="text-slate-500 mb-8">بيانات نشاطك ومنتجاتك هي مصدر معرفة البوت عند الرد على العملاء.</p>
 <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm">
 <div class="grid gap-5">
-<label>اسم الشركة<input id="company_name" class="mt-2 w-full p-3 border rounded-xl"></label>
-<label>وصف الشركة<textarea id="description" rows="4" class="mt-2 w-full p-3 border rounded-xl" placeholder="ما الذي تقدمه الشركة؟"></textarea></label>
-<div><div class="flex justify-between items-center"><label class="font-semibold">المنتجات والخدمات</label><button type="button" id="addProduct" class="px-4 py-2 rounded-xl bg-slate-900 text-white font-bold">+ إضافة منتج</button></div><p class="text-sm text-slate-500 mt-1 mb-3">أضف اسم المنتج ووصفه وسعره وكلمات تساعد الـAI على التعرف عليه.</p><div id="productsList" class="space-y-3"></div></div><textarea id="products" class="hidden"></textarea>
-<label>ماذا تريد من الـAI أن يفعل؟<textarea id="instructions" rows="7" class="mt-2 w-full p-3 border rounded-xl" placeholder="مثال: لو حد قال صلي على النبي رد عليه: عليه الصلاة والسلام. لو التعليق عن شراء منتج أو سعره، رد عليه في الخاص. التعليقات العامة العادية رد عليها في التعليق. لو محتاج موظف، حوّله للرقم الموجود."></textarea><p class="text-sm text-slate-500 mt-2">الـAI يحوّل التعليمات دي تلقائياً إلى Action عند وصول كل رسالة أو تعليق.</p></label>
+<label class="font-semibold">اسم الشركة / الصفحة<input id="company_name" class="mt-2 w-full p-3 border rounded-xl" placeholder="مثال: متجر النور"></label>
+<label class="font-semibold">وصف النشاط<textarea id="description" rows="4" class="mt-2 w-full p-3 border rounded-xl" placeholder="ما الذي تبيعه؟ ومن هم عملاؤك؟"></textarea></label>
+<div><div class="flex justify-between items-center gap-3"><label class="font-semibold">المنتجات والخدمات</label><button type="button" id="addProduct" class="px-4 py-2 rounded-xl bg-slate-900 text-white font-bold whitespace-nowrap">+ إضافة منتج</button></div>
+<p class="text-sm text-slate-500 mt-1 mb-3">كل منتج يحتاج اسماً ووصفاً وصورة واحدة على الأقل. الصور تُضغط تلقائياً قبل الحفظ لتقليل استهلاك التخزين والسرعة مع الحفاظ على جودة جيدة.</p>
+<div id="productsList" class="space-y-4"></div></div>
+<label class="font-semibold">ماذا تريد من الـAI أن يفعل؟<textarea id="instructions" rows="6" class="mt-2 w-full p-3 border rounded-xl" placeholder="مثال: لو العميل يسأل عن السعر، أعطه السعر. لو طلب موظفاً، حوّله للرقم الموجود."></textarea><p class="text-sm text-slate-500 mt-2">اختياري. اكتب القواعد الخاصة بطريقة التعامل مع العملاء.</p></label>
 <div class="grid md:grid-cols-2 gap-5">
-<label>لهجة الرد<select id="tone" class="mt-2 w-full p-3 border rounded-xl bg-white">
-<option value="مصري عامي">مصري عامي</option><option value="خليجي">خليجي</option><option value="رسمي">رسمي</option>
-</select></label>
-<label>رقم التحويل لموظف<input id="handover_number" class="mt-2 w-full p-3 border rounded-xl" placeholder="2010..."></label>
+<label class="font-semibold">لهجة الرد<select id="tone" class="mt-2 w-full p-3 border rounded-xl bg-white"><option value="مصري عامي">مصري عامي</option><option value="خليجي">خليجي</option><option value="رسمي">رسمي</option></select></label>
+<label class="font-semibold">رقم التحويل لموظف<input id="handover_number" class="mt-2 w-full p-3 border rounded-xl" placeholder="2010..." dir="ltr"></label>
 </div>
 <label class="flex items-center gap-3"><input id="is_active" type="checkbox" class="w-5 h-5" checked><span>تفعيل الرد الآلي</span></label>
-<button id="save" class="bg-blue-600 text-white font-bold py-3 rounded-xl hover:bg-blue-700">حفظ الإعدادات</button>
-<p id="status" class="text-sm text-center"></p>
-</div></div></div>
-<script src="config.js"></script>
-<script>
-const token=localStorage.getItem('whatsauto_token'); if(!token) location.href='login.html';
-document.getElementById('logout').onclick=()=>localStorage.removeItem('whatsauto_token');
-const ids=['company_name','description','products','instructions','tone','handover_number','is_active'];
-function readProducts(){try{return JSON.parse(document.getElementById('products').value||'[]')}catch{return []}}
-function renderProducts(items){const box=document.getElementById('productsList');box.innerHTML='';items.forEach((p,i)=>{const row=document.createElement('div');row.className='product-row grid md:grid-cols-4 gap-2 p-3 border rounded-xl bg-slate-50';row.innerHTML=`<input class="pname p-2 border rounded-lg" placeholder="اسم المنتج" value="${p.name||''}"><input class="pdesc p-2 border rounded-lg" placeholder="الوصف" value="${p.description||''}"><input class="pprice p-2 border rounded-lg" placeholder="السعر" value="${p.price||''}"><input class="pkeys p-2 border rounded-lg" placeholder="كلمات مفتاحية، مفصولة بفاصلة" value="${(p.keywords||[]).join(', ')}"><button type="button" class="remove text-red-600 font-bold md:col-span-4">حذف المنتج</button>`;row.querySelector('.remove').onclick=()=>{items.splice(i,1);renderProducts(items)};box.appendChild(row)})}
-function collectProducts(){return [...document.querySelectorAll('#productsList>div')].map(row=>({name:row.querySelector('.pname').value.trim(),description:row.querySelector('.pdesc').value.trim(),price:row.querySelector('.pprice').value.trim(),keywords:row.querySelector('.pkeys').value.split(',').map(x=>x.trim()).filter(Boolean)})).filter(x=>x.name)}
-document.getElementById('addProduct').onclick=()=>{const items=readProducts();items.push({name:'',description:'',price:'',keywords:[]});renderProducts(items)}
+<button id="save" class="bg-blue-600 text-white font-bold py-3 rounded-xl hover:bg-blue-700">حفظ والمتابعة</button>
+<p id="status" class="text-sm text-center min-h-5"></p>
+</div></div></div></main>
+<script src="config.js"></script><script>
+const token=localStorage.getItem('whatsauto_token');if(!token)location.href='login.html';
+const setupMode=new URLSearchParams(location.search).get('setup')==='1';
+const logout=document.getElementById('logout');logout.onclick=()=>localStorage.removeItem('whatsauto_token');
+const menuBtn=document.getElementById('menuBtn'),sidebar=document.getElementById('sidebar'),overlay=document.getElementById('overlay');
+function toggleMenu(){sidebar.classList.toggle('open');overlay.classList.toggle('open')}menuBtn.onclick=toggleMenu;overlay.onclick=toggleMenu;
+if(setupMode)document.getElementById('setupBanner').classList.remove('hidden');
+let products=[];
+function uid(){return Math.random().toString(36).slice(2)+Date.now().toString(36)}
+function makeProduct(p={}){return {id:p.id||uid(),name:p.name||'',description:p.description||'',price:p.price||'',keywords:Array.isArray(p.keywords)?p.keywords:[],images:Array.isArray(p.images)?p.images:[]}}
+function renderProducts(){
+ const box=document.getElementById('productsList');box.innerHTML='';
+ products.forEach((p,index)=>{
+  const card=document.createElement('div');card.className='product-card border rounded-2xl p-4 bg-slate-50';
+  card.innerHTML='<div class="grid md:grid-cols-2 gap-3"><input class="pname p-3 border rounded-xl bg-white" placeholder="اسم المنتج" value=""><input class="pprice p-3 border rounded-xl bg-white" placeholder="السعر" value=""><textarea class="pdesc p-3 border rounded-xl bg-white md:col-span-2" rows="3" placeholder="وصف المنتج، المميزات، المقاسات..."></textarea><input class="pkeys p-3 border rounded-xl bg-white md:col-span-2" placeholder="كلمات مفتاحية، مفصولة بفاصلة" value=""></div><div class="mt-3"><div class="flex items-center justify-between gap-3"><span class="font-semibold">صور المنتج</span><label class="px-3 py-2 rounded-xl bg-white border font-bold cursor-pointer text-sm">+ إضافة صور<input class="imageInput hidden" type="file" accept="image/*" multiple></label></div><div class="product-image-grid"></div><p class="imageStatus text-xs text-slate-500 mt-2"></p></div><button type="button" class="remove mt-3 text-red-600 font-bold">حذف المنتج</button>';
+  const name=card.querySelector('.pname'),price=card.querySelector('.pprice'),desc=card.querySelector('.pdesc'),keys=card.querySelector('.pkeys');
+  name.value=p.name;price.value=p.price;desc.value=p.description;keys.value=p.keywords.join(', ');
+  card.querySelector('.remove').onclick=()=>{products.splice(index,1);renderProducts()};
+  const grid=card.querySelector('.product-image-grid');
+  function drawImages(){grid.innerHTML='';p.images.forEach((src,j)=>{const wrap=document.createElement('div');wrap.className='product-image';const img=document.createElement('img');img.src=src;img.alt=p.name||'صورة المنتج';const b=document.createElement('button');b.type='button';b.textContent='×';b.onclick=()=>{p.images.splice(j,1);drawImages()};wrap.append(img,b);grid.appendChild(wrap)})}
+  card.querySelector('.imageInput').onchange=async e=>{const files=[...e.target.files];if(!files.length)return;const st=card.querySelector('.imageStatus');st.textContent='جاري ضغط الصور...';try{for(const file of files.slice(0,4-p.images.length)){p.images.push(await compressImage(file,110*1024,1200))}st.textContent='تم تجهيز الصور بحجم مضغوط مناسب.';drawImages()}catch(err){st.textContent='تعذر ضغط إحدى الصور. جرّب صورة أخرى.'}e.target.value=''};
+  [name,price,desc,keys].forEach(el=>el.oninput=()=>{p.name=name.value.trim();p.price=price.value.trim();p.description=desc.value.trim();p.keywords=keys.value.split(',').map(x=>x.trim()).filter(Boolean)});
+  drawImages();box.appendChild(card);
+ });
+}
+async function compressImage(file,targetBytes,maxSide){
+ if(file.size<=targetBytes && file.type==='image/webp')return await fileToDataURL(file);
+ const bitmap=await createImageBitmap(file);const scale=Math.min(1,maxSide/Math.max(bitmap.width,bitmap.height));const w=Math.max(1,Math.round(bitmap.width*scale)),h=Math.max(1,Math.round(bitmap.height*scale));const canvas=document.createElement('canvas');canvas.width=w;canvas.height=h;canvas.getContext('2d').drawImage(bitmap,0,0,w,h);bitmap.close();
+ let type='image/webp',quality=.82,blob=await canvasToBlob(canvas,type,quality);
+ if(!blob){type='image/jpeg';quality=.82;blob=await canvasToBlob(canvas,type,quality)}
+ for(let i=0;i<7 && blob.size>targetBytes;i++){quality-=.09;blob=await canvasToBlob(canvas,type,Math.max(.35,quality))}
+ if(blob.size>targetBytes){for(let i=0;i<3 && blob.size>targetBytes;i++){canvas.width=Math.round(canvas.width*.82);canvas.height=Math.round(canvas.height*.82);const ctx=canvas.getContext('2d');ctx.clearRect(0,0,canvas.width,canvas.height);ctx.drawImage(bitmap,0,0,canvas.width,canvas.height);blob=await canvasToBlob(canvas,type,.65)}}
+ return await blobToDataURL(blob);
+}
+function canvasToBlob(canvas,type,quality){return new Promise(resolve=>canvas.toBlob(resolve,type,quality))}
+function fileToDataURL(file){return new Promise((resolve,reject)=>{const r=new FileReader();r.onload=()=>resolve(r.result);r.onerror=reject;r.readAsDataURL(file)})}
+function blobToDataURL(blob){return new Promise((resolve,reject)=>{const r=new FileReader();r.onload=()=>resolve(r.result);r.onerror=reject;r.readAsDataURL(blob)})}
+function validSetup(){
+ if(!document.getElementById('company_name').value.trim())return 'اكتب اسم الشركة أو الصفحة.';
+ if(!document.getElementById('description').value.trim())return 'اكتب وصفاً مختصراً لنشاطك.';
+ if(!products.length)return 'أضف منتجاً واحداً على الأقل.';
+ for(let i=0;i<products.length;i++){const p=products[i];if(!p.name)return 'اكتب اسم المنتج رقم '+(i+1)+'.';if(!p.description)return 'اكتب وصف المنتج: '+p.name+'.';if(!p.images.length)return 'أضف صورة واحدة على الأقل للمنتج: '+p.name+'.'}
+ return '';
+}
+document.getElementById('addProduct').onclick=()=>{products.push(makeProduct());renderProducts();setTimeout(()=>document.querySelector('#productsList>div:last-child .pname')?.focus(),50)};
 async function load(){
- const r=await fetch(API_BASE_URL+'/api/settings/bot',{headers:{Authorization:'Bearer '+token}});
- if(r.status===401){location.href='login.html';return}
- const d=await r.json(); ids.forEach(id=>{const e=document.getElementById(id); if(e.type==='checkbox')e.checked=d.is_active; else e.value=d[id]||''}); renderProducts(readProducts());
+ const r=await fetch(API_BASE_URL+'/api/settings/bot',{headers:{Authorization:'Bearer '+token}});if(r.status===401){location.href='login.html';return}
+ const d=await r.json();document.getElementById('company_name').value=d.company_name||sessionStorage.getItem('whatsauto_setup_company')||'';document.getElementById('description').value=d.description||'';document.getElementById('instructions').value=d.instructions||'';document.getElementById('tone').value=d.tone||'مصري عامي';document.getElementById('handover_number').value=d.handover_number||'';document.getElementById('is_active').checked=d.is_active!==false;
+ try{products=(JSON.parse(d.products||'[]')||[]).map(makeProduct)}catch{products=[]}renderProducts();
 }
 document.getElementById('save').onclick=async()=>{
- const b=document.getElementById('save'),s=document.getElementById('status'); b.disabled=true;b.textContent='جاري الحفظ...';
- const body={};ids.forEach(id=>{const e=document.getElementById(id);body[id]=e.type==='checkbox'?e.checked:e.value}); body.products=JSON.stringify(collectProducts()); document.getElementById('products').value=body.products;
- const r=await fetch(API_BASE_URL+'/api/settings/bot',{method:'PUT',headers:{'Content-Type':'application/json',Authorization:'Bearer '+token},body:JSON.stringify(body)});
- s.textContent=r.ok?'تم حفظ الإعدادات':'حدث خطأ أثناء الحفظ';s.className=r.ok?'text-green-600 text-sm text-center':'text-red-600 text-sm text-center';
- b.disabled=false;b.textContent='حفظ الإعدادات';
+ const b=document.getElementById('save'),s=document.getElementById('status'),err=validSetup();if(err){s.textContent=err;s.className='text-red-600 text-sm text-center min-h-5';return}
+ b.disabled=true;b.textContent='جاري ضغط الصور وحفظ الإعدادات...';s.textContent='';
+ const body={company_name:document.getElementById('company_name').value.trim(),description:document.getElementById('description').value.trim(),products:JSON.stringify(products),instructions:document.getElementById('instructions').value.trim(),tone:document.getElementById('tone').value,handover_number:document.getElementById('handover_number').value.trim(),is_active:document.getElementById('is_active').checked};
+ try{const r=await fetch(API_BASE_URL+'/api/settings/bot',{method:'PUT',headers:{'Content-Type':'application/json',Authorization:'Bearer '+token},body:JSON.stringify(body)});if(!r.ok){s.textContent='حدث خطأ أثناء الحفظ';s.className='text-red-600 text-sm text-center min-h-5';return}s.textContent='تم الحفظ بنجاح';s.className='text-green-600 text-sm text-center min-h-5';sessionStorage.removeItem('whatsauto_setup_company');setTimeout(()=>location.href='dashboard.html',350)}catch{ s.textContent='تعذر الاتصال بالخادم';s.className='text-red-600 text-sm text-center min-h-5'}finally{b.disabled=false;b.textContent='حفظ والمتابعة'}
 };
 load();
-</script>
-</body></html>
+</script></body></html>

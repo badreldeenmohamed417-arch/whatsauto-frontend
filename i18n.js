@@ -16,7 +16,7 @@ function translateText(root){ root.querySelectorAll("[data-i18n]").forEach(e=>{c
 function apply(){
  const x=en();document.documentElement.lang=x?"en":"ar";document.documentElement.dir=x?"ltr":"rtl";
  if(x)translateText(document.body);
- const b=document.createElement("div");b.className="utility-bar";b.innerHTML='<button id="langBtn">'+(x?"عربي":"English")+'</button><button id="themeBtn">◐</button>';
+ const b=document.createElement("div");b.className="utility-bar";b.innerHTML='<button id="langBtn">'+(x?"Arabic":"English")+'</button><button id="themeBtn" title="'+(x?"Theme":"المظهر")+'">◐</button>';
  const sidebar=document.querySelector(".app-sidebar");if(sidebar){const footer=sidebar.querySelector(".app-sidebar-footer");if(footer)sidebar.insertBefore(b,footer);else sidebar.appendChild(b)}else document.body.appendChild(b);
  document.getElementById("langBtn").onclick=()=>{localStorage.setItem("repleyo_lang",x?"ar":"en");location.reload()};
  document.getElementById("themeBtn").onclick=()=>{const d=localStorage.getItem("repleyo_theme")==="dark"?"light":"dark";localStorage.setItem("repleyo_theme",d);document.documentElement.dataset.theme=d};

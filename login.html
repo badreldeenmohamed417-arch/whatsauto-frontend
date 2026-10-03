@@ -50,7 +50,7 @@
             const email = e.target.elements[0].value;
             const password = e.target.elements[1].value;
             const btn = e.target.querySelector('button');
-            btn.textContent = 'جاري الدخول...';
+            btn.textContent = window.repleyoT('جاري الدخول...');
             btn.disabled = true;
 
             try {
@@ -66,16 +66,16 @@
                     localStorage.setItem('repleyo_token', data.access_token);
                     window.location.href = 'dashboard.html';
                 } else {
-                    let errorMsg = 'فشل تسجيل الدخول. يرجى التحقق من البيانات.';
+                    let errorMsg = window.repleyoT('فشل تسجيل الدخول. يرجى التحقق من البيانات.');
                     if (data && data.detail) {
                         errorMsg = typeof data.detail === 'string' ? data.detail : JSON.stringify(data.detail);
                     }
                     alert(errorMsg);
                 }
             } catch (err) {
-                alert('خطأ في الاتصال بالخادم.');
+                alert(window.repleyoT('خطأ في الاتصال بالخادم.'));
             } finally {
-                btn.textContent = 'دخول';
+                btn.textContent = window.repleyoT('دخول');
                 btn.disabled = false;
             }
         });

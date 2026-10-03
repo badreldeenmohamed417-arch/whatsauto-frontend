@@ -68,7 +68,7 @@
                 } else {
                     let errorMsg = window.repleyoT('فشل تسجيل الدخول. يرجى التحقق من البيانات.');
                     if (data && data.detail) {
-                        errorMsg = typeof data.detail === 'string' ? data.detail : JSON.stringify(data.detail);
+                        errorMsg = typeof data.detail === 'string' ? window.repleyoT(data.detail) : JSON.stringify(data.detail);
                     }
                     alert(errorMsg);
                 }

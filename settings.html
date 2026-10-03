@@ -45,12 +45,13 @@ function renderProducts(){
  products.forEach((p,index)=>{
   const card=document.createElement('div');card.className='product-card border rounded-2xl p-4 bg-slate-50';
   card.innerHTML='<div class="grid md:grid-cols-2 gap-3"><input class="pname p-3 border rounded-xl bg-white" placeholder="اسم المنتج" value=""><input class="pprice p-3 border rounded-xl bg-white" placeholder="السعر" value=""><textarea class="pdesc p-3 border rounded-xl bg-white md:col-span-2" rows="3" placeholder="وصف المنتج، المميزات، المقاسات..."></textarea><input class="pkeys p-3 border rounded-xl bg-white md:col-span-2" placeholder="كلمات مفتاحية، مفصولة بفاصلة" value=""></div><div class="mt-3"><div class="flex items-center justify-between gap-3"><span class="font-semibold">صور المنتج</span><label class="px-3 py-2 rounded-xl bg-white border font-bold cursor-pointer text-sm">+ إضافة صور<input class="imageInput hidden" type="file" accept="image/*" multiple></label></div><div class="product-image-grid"></div><p class="imageStatus text-xs text-slate-500 mt-2"></p></div><button type="button" class="remove mt-3 text-red-600 font-bold">حذف المنتج</button>';
+  window.repleyoTranslate(card);
   const name=card.querySelector('.pname'),price=card.querySelector('.pprice'),desc=card.querySelector('.pdesc'),keys=card.querySelector('.pkeys');
   name.value=p.name;price.value=p.price;desc.value=p.description;keys.value=p.keywords.join(', ');
   card.querySelector('.remove').onclick=()=>{products.splice(index,1);renderProducts()};
   const grid=card.querySelector('.product-image-grid');
-  function drawImages(){grid.innerHTML='';p.images.forEach((src,j)=>{const wrap=document.createElement('div');wrap.className='product-image';const img=document.createElement('img');img.src=src;img.alt=p.name||'صورة المنتج';const b=document.createElement('button');b.type='button';b.textContent='×';b.onclick=()=>{p.images.splice(j,1);drawImages()};wrap.append(img,b);grid.appendChild(wrap)})}
-  card.querySelector('.imageInput').onchange=async e=>{const files=[...e.target.files];if(!files.length)return;const st=card.querySelector('.imageStatus');st.textContent='جاري ضغط الصور...';try{for(const file of files.slice(0,4-p.images.length)){p.images.push(await compressImage(file,100*1024,1200))}st.textContent='تم تجهيز الصور بحجم مضغوط مناسب.';drawImages()}catch(err){st.textContent='تعذر ضغط إحدى الصور. جرّب صورة أخرى.'}e.target.value=''};
+  function drawImages(){grid.innerHTML='';p.images.forEach((src,j)=>{const wrap=document.createElement('div');wrap.className='product-image';const img=document.createElement('img');img.src=src;img.alt=p.name||window.repleyoT('صورة المنتج');const b=document.createElement('button');b.type='button';b.textContent='×';b.onclick=()=>{p.images.splice(j,1);drawImages()};wrap.append(img,b);grid.appendChild(wrap)})}
+  card.querySelector('.imageInput').onchange=async e=>{const files=[...e.target.files];if(!files.length)return;const st=card.querySelector('.imageStatus');st.textContent=window.repleyoT('جاري ضغط الصور...');try{for(const file of files.slice(0,4-p.images.length)){p.images.push(await compressImage(file,100*1024,1200))}st.textContent=window.repleyoT('تم تجهيز الصور بحجم مضغوط مناسب.');drawImages()}catch(err){st.textContent=window.repleyoT('تعذر ضغط إحدى الصور. جرّب صورة أخرى.')}e.target.value=''};
   [name,price,desc,keys].forEach(el=>el.oninput=()=>{p.name=name.value.trim();p.price=price.value.trim();p.description=desc.value.trim();p.keywords=keys.value.split(',').map(x=>x.trim()).filter(Boolean)});
   drawImages();box.appendChild(card);
  });
@@ -68,10 +69,10 @@ function canvasToBlob(canvas,type,quality){return new Promise(resolve=>canvas.to
 function fileToDataURL(file){return new Promise((resolve,reject)=>{const r=new FileReader();r.onload=()=>resolve(r.result);r.onerror=reject;r.readAsDataURL(file)})}
 function blobToDataURL(blob){return new Promise((resolve,reject)=>{const r=new FileReader();r.onload=()=>resolve(r.result);r.onerror=reject;r.readAsDataURL(blob)})}
 function validSetup(){
- if(!document.getElementById('company_name').value.trim())return 'اكتب اسم الشركة أو الصفحة.';
- if(!document.getElementById('description').value.trim())return 'اكتب وصفاً مختصراً لنشاطك.';
- if(!products.length)return 'أضف منتجاً واحداً على الأقل.';
- for(let i=0;i<products.length;i++){const p=products[i];if(!p.name)return 'اكتب اسم المنتج رقم '+(i+1)+'.';if(!p.description)return 'اكتب وصف المنتج: '+p.name+'.';if(!p.images.length)return 'أضف صورة واحدة على الأقل للمنتج: '+p.name+'.'}
+ if(!document.getElementById('company_name').value.trim())return window.repleyoT('اكتب اسم الشركة أو الصفحة.');
+ if(!document.getElementById('description').value.trim())return window.repleyoT('اكتب وصفاً مختصراً لنشاطك.');
+ if(!products.length)return window.repleyoT('أضف منتجاً واحداً على الأقل.');
+ for(let i=0;i<products.length;i++){const p=products[i];if(!p.name)return window.repleyoT('اكتب اسم المنتج رقم')+' '+(i+1)+'.';if(!p.description)return window.repleyoT('اكتب وصف المنتج:')+' '+p.name+'.';if(!p.images.length)return window.repleyoT('أضف صورة واحدة على الأقل للمنتج:')+' '+p.name+'.'}
  return '';
 }
 document.getElementById('addProduct').onclick=()=>{products.push(makeProduct());renderProducts();setTimeout(()=>document.querySelector('#productsList>div:last-child .pname')?.focus(),50)};
@@ -82,9 +83,9 @@ async function load(){
 }
 document.getElementById('save').onclick=async()=>{
  const b=document.getElementById('save'),s=document.getElementById('status'),err=validSetup();if(err){s.textContent=err;s.className='text-red-600 text-sm text-center min-h-5';return}
- b.disabled=true;b.textContent='جاري ضغط الصور وحفظ الإعدادات...';s.textContent='';
+ b.disabled=true;b.textContent=window.repleyoT('جاري ضغط الصور وحفظ الإعدادات...');s.textContent='';
  const body={company_name:document.getElementById('company_name').value.trim(),description:document.getElementById('description').value.trim(),products:JSON.stringify(products),instructions:document.getElementById('instructions').value.trim(),tone:document.getElementById('tone').value,handover_number:document.getElementById('handover_number').value.trim(),is_active:document.getElementById('is_active').checked};
- try{const r=await fetch(API_BASE_URL+'/api/settings/bot',{method:'PUT',headers:{'Content-Type':'application/json',Authorization:'Bearer '+token},body:JSON.stringify(body)});if(!r.ok){s.textContent='حدث خطأ أثناء الحفظ';s.className='text-red-600 text-sm text-center min-h-5';return}s.textContent='تم الحفظ بنجاح';s.className='text-green-600 text-sm text-center min-h-5';sessionStorage.removeItem('repleyo_setup_company');setTimeout(()=>location.href='dashboard.html',350)}catch{ s.textContent='تعذر الاتصال بالخادم';s.className='text-red-600 text-sm text-center min-h-5'}finally{b.disabled=false;b.textContent='حفظ والمتابعة'}
+ try{const r=await fetch(API_BASE_URL+'/api/settings/bot',{method:'PUT',headers:{'Content-Type':'application/json',Authorization:'Bearer '+token},body:JSON.stringify(body)});if(!r.ok){s.textContent=window.repleyoT('حدث خطأ أثناء الحفظ');s.className='text-red-600 text-sm text-center min-h-5';return}s.textContent=window.repleyoT('تم الحفظ بنجاح');s.className='text-green-600 text-sm text-center min-h-5';sessionStorage.removeItem('repleyo_setup_company');setTimeout(()=>location.href='dashboard.html',350)}catch{ s.textContent=window.repleyoT('تعذر الاتصال بالخادم');s.className='text-red-600 text-sm text-center min-h-5'}finally{b.disabled=false;b.textContent=window.repleyoT('حفظ والمتابعة')}
 };
 load();
 </script><script src="i18n.js"></script></body></html>
